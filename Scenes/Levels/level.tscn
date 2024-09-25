@@ -1,0 +1,45 @@
+[gd_scene load_steps=8 format=3 uid="uid://dkdoryd83r3mh"]
+
+[ext_resource type="Script" path="res://Scripts/camera_controller.gd" id="2_4curt"]
+[ext_resource type="PackedScene" uid="uid://m5a7t3px0oi1" path="res://Scenes/player.tscn" id="2_y2jpk"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_bmn5r"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_r7f8s"]
+sky_material = SubResource("ProceduralSkyMaterial_bmn5r")
+
+[sub_resource type="Environment" id="Environment_rfjn0"]
+background_mode = 2
+sky = SubResource("Sky_r7f8s")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_esb7q"]
+size = Vector2(200, 200)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0tnr2"]
+albedo_color = Color(0, 0.513002, 0, 1)
+
+[node name="Level" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_rfjn0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("2_y2jpk")]
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="."]
+use_collision = true
+mesh = SubResource("PlaneMesh_esb7q")
+material = SubResource("StandardMaterial3D_0tnr2")
+
+[node name="Camera Gimbal" type="Node3D" parent="."]
+script = ExtResource("2_4curt")
+
+[node name="Camera3D" type="Camera3D" parent="Camera Gimbal"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 5, 10)
