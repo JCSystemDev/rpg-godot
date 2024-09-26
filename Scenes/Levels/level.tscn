@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://dkdoryd83r3mh"]
+[gd_scene load_steps=11 format=3 uid="uid://dkdoryd83r3mh"]
 
 [ext_resource type="Script" path="res://Scripts/camera_controller.gd" id="2_4curt"]
 [ext_resource type="PackedScene" uid="uid://m5a7t3px0oi1" path="res://Scenes/player.tscn" id="2_y2jpk"]
+[ext_resource type="Script" path="res://Scripts/item.gd" id="3_3phas"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_bmn5r"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -21,6 +22,10 @@ size = Vector2(200, 200)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0tnr2"]
 albedo_color = Color(0, 0.513002, 0, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n8u2o"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_arkt5"]
 
 [node name="Level" type="Node3D"]
 
@@ -43,3 +48,21 @@ script = ExtResource("2_4curt")
 
 [node name="Camera3D" type="Camera3D" parent="Camera Gimbal"]
 transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 5, 10)
+
+[node name="Item" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.5, 0)
+script = ExtResource("3_3phas")
+
+[node name="Area3D" type="Area3D" parent="Item"]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Item/Area3D"]
+shape = SubResource("BoxShape3D_n8u2o")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Item"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Item/StaticBody3D"]
+shape = SubResource("BoxShape3D_arkt5")
+
+[connection signal="area_entered" from="Item/Area3D" to="Item" method="_on_area_3d_area_entered"]
